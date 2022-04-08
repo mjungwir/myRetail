@@ -1,6 +1,6 @@
 package com.example.myRetail.repository
 
-import com.example.myRetail.model.PricingData
+import com.example.myRetail.repository.model.PricingData
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
@@ -13,15 +13,26 @@ class PricingRepositoryIntegrationSpec extends Specification {
 
     def "findPricingByTcn"() {
         setup:
-        pricingRepository.save(new PricingData(tcin: 'bob', currentPrice: 1.23, currencyCode: 'USD'))
+        PricingData pricingData = pricingRepository.save(new PricingData(tcin: 'bob', currentPrice: 1.23, currencyCode: 'USD'))
 
         when:
         PricingData result = pricingRepository.findPricingByTcn('bob')
 
         then:
         result
-        result.tcin == 'bob'
-        result.currentPrice == 1.23 as double
-        result.currencyCode == 'USD'
+        result.tcin == pricingData.tcin
+        result.currentPrice == pricingData.currentPrice
+        result.currencyCode == pricingData.currencyCode
+
+        cleanup:
+        pricingRepository.delete(pricingData)
+    }
+
+    def "findPricingByTcn - not found"() {
+        when:
+        PricingData result = pricingRepository.findPricingByTcn('bob')
+
+        then:
+        result == null
     }
 }
