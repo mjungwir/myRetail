@@ -22,11 +22,5 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
       ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
 
-#  cassandra:
-#    image: cassandra:3.11
-#    environment:
-#      - CASSANDRA_START_RPC=true
-#    ports:
-#      - 9042:9042
-#    volumes:
-#      - ./cassandra_schema.cql:/docker-entrypoint-initdb.d/cassandra_schema.cql:ro
+//TODO Remove data folder from git and add to gitignore
+//TODO Think about HELP.md
