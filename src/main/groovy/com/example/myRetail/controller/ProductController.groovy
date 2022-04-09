@@ -3,6 +3,8 @@ package com.example.myRetail.controller
 import com.example.myRetail.domain.Product
 import com.example.myRetail.service.ProductService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -11,7 +13,8 @@ class ProductController {
     @Autowired
     ProductService productService
 
-    Product getProduct(String id) {
+    @GetMapping("/product/{id}")
+    Product getProduct(@PathVariable('id') String id) {
         return productService.getProduct(id)
     }
 }

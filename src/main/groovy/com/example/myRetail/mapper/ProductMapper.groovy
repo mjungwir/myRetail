@@ -3,7 +3,9 @@ package com.example.myRetail.mapper
 import com.example.myRetail.domain.Product
 import com.example.myRetail.product.ProductApiResponseDto
 import com.example.myRetail.repository.model.PricingData
+import org.springframework.stereotype.Component
 
+@Component
 class ProductMapper {
     Product mapFromProductApi(ProductApiResponseDto productApiResponseDto) {
         return productApiResponseDto?.data?.product?.with {
