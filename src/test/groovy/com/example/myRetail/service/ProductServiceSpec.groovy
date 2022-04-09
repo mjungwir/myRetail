@@ -38,4 +38,19 @@ class ProductServiceSpec extends Specification {
         1 * mockProductMapper.mapFromPricingData(pricingData, partiallymappedProduct) >> fullyMappedProduct
         result == fullyMappedProduct
     }
+
+    def "getProduct - not found"() {
+        setup:
+        String tcin = 'tcin1'
+
+        when:
+        Product result = productService.getProduct(tcin)
+
+        then:
+        1 * mockProductRestClient.getProductData(tcin) >> null
+        0 * _
+
+        and:
+        result == null
+    }
 }

@@ -22,6 +22,10 @@ class ProductService {
 
     Product getProduct(String tcin) {
         final ProductApiResponseDto responseDto = productRestClient.getProductData(tcin)
+        if (!responseDto) {
+            return null
+        }
+
         Product product = productMapper.mapFromProductApi(responseDto)
         PricingData pricingData = pricingRepository.findPricingByTcn(tcin)
         return productMapper.mapFromPricingData(pricingData, product)

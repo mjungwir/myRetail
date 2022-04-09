@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.http.HttpMethod
+import org.springframework.http.ResponseEntity
 import spock.lang.Specification
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
@@ -12,6 +14,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 class ProductApiSpec extends Specification {
     static final String PRODUCT_ID = '13860428'
+
     @LocalServerPort
     private int port
 
@@ -24,5 +27,13 @@ class ProductApiSpec extends Specification {
 
         then:
         result.id == PRODUCT_ID
+    }
+
+    def "getProduct - unknown product"() {
+        when:
+        ResponseEntity<Product> responseEntity = restTemplate.exchange("http://localhost:$port/product/99999", HttpMethod.GET, null, Product)
+
+        then:
+        responseEntity.statusCodeValue == 404
     }
 }
