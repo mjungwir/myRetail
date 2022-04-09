@@ -30,4 +30,17 @@ class ProductService {
         PricingData pricingData = pricingRepository.findPricingByTcn(tcin)
         return productMapper.mapFromPricingData(pricingData, product)
     }
+
+    Product updateProductPricing(Product requestProduct) {
+        final PricingData pricingData = pricingRepository.findPricingByTcn(requestProduct.id)
+        if (!pricingData) {
+            return null
+        }
+
+        pricingData.currentPrice = requestProduct.currentPrice
+        pricingData.currencyCode = requestProduct.currencyCode
+        pricingRepository.save(pricingData)
+
+        return requestProduct
+    }
 }

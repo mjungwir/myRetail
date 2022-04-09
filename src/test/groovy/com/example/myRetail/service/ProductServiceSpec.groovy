@@ -53,4 +53,37 @@ class ProductServiceSpec extends Specification {
         and:
         result == null
     }
+
+    def "updateProductPricing"() {
+        setup:
+        String tcin = 'tcin1'
+        Product requestProduct = new Product(id: tcin, name: 'name', currentPrice: 4.56, currencyCode: 'EUR')
+        PricingData existingPricingData = new PricingData(tcin: tcin, currentPrice: 1.23, currencyCode: 'USD')
+        PricingData updatedPricingData = new PricingData(tcin: tcin, currentPrice: 4.56, currencyCode: 'EUR')
+        Product fullyMappedProduct = Stub()
+
+        when:
+        Product result = productService.updateProductPricing(requestProduct)
+
+        then:
+        1 * mockPricingRepository.findPricingByTcn(tcin) >> existingPricingData
+        1 * mockPricingRepository.save({it.tcin == tcin && it.currentPrice == 4.56 && it.currencyCode == 'EUR'}) >> updatedPricingData
+        result == requestProduct
+    }
+
+    def "updateProductPricing - not found"() {
+        setup:
+        String tcin = 'tcin1'
+        Product requestProduct = new Product(id: tcin, name: 'name', currentPrice: 4.56, currencyCode: 'EUR')
+
+        when:
+        Product result = productService.updateProductPricing(requestProduct)
+
+        then:
+        1 * mockPricingRepository.findPricingByTcn(tcin) >> null
+        0 * _
+
+        and:
+        result == null
+    }
 }
