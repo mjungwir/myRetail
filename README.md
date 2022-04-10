@@ -7,12 +7,14 @@ I chose to make a Groovy Spring boot app using Spring initializer to get started
 This uses the gradle wrapper, jdk17, and a docker compose file. I used Docker Desktop, but you'll need some container runtime that can run a docker-compose file.
 
 ###Note
-This was built on a windows machine using Git Bash. Hopefully everything works on a Max/'nix machine, but there's a chance the EOL characters don't play nicely.
+This was built on a windows machine using Git Bash. It was tested on a Mac and all that had to be done was `chmod` permissions on `gradlew` and `startDocker.sh`
 
 ##Running Docker
 The application expects docker to be running MongoDB locally on port `27017`. It might be more convenient to build the container lifecycle into the build/test workflow, but this is not yet completed.
 
 You can run docker with `docker-compose up` or whichever container interface you prefer. If you are using `docker-compose` you can also leverage the script to make cleaning up from the previous run easy. `./startDocker.sh`
+
+MongoDB UI is available at `http://localhost:8081`
 
 ##Building the App
 ```./gradlew build```
