@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 class PricingData {
 
     @Id
+    String id
     String tcin
     double currentPrice
     String currencyCode

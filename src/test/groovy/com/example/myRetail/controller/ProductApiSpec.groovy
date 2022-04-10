@@ -46,22 +46,27 @@ class ProductApiSpec extends Specification {
     def "updatePrice"() {
         setup:
         PricingData initialPricing = pricingRepository.findPricingByTcn(PRODUCT_ID)
+        double initialPrice = initialPricing.currentPrice
+        String initialCode = initialPricing.currencyCode
 
         when:
-        ResponseEntity<Product> response = restTemplate.exchange("http://localhost:$port/product/$PRODUCT_ID", HttpMethod.PUT, new HttpEntity(new Product(id: PRODUCT_ID, name: 'name', currentPrice: 1.23, currencyCode: 'EUR')), Product)
+        ResponseEntity<Product> response = restTemplate.exchange("http://localhost:$port/product/$PRODUCT_ID", HttpMethod.PUT, new HttpEntity(new Product(id: PRODUCT_ID, name: 'name', currentPrice: 5.55, currencyCode: 'EUR')), Product)
 
         then:
         response.statusCodeValue == 200
-        response.getBody().currentPrice == 1.23
+        response.getBody().currentPrice == 5.55
         response.getBody().currencyCode == 'EUR'
 
         and:
         PricingData pricingData = pricingRepository.findPricingByTcn(PRODUCT_ID)
-        pricingData.currentPrice == 1.23d
+        pricingData.currentPrice == 5.55d
         pricingData.currencyCode == 'EUR'
 
         cleanup:
-        pricingRepository.save(initialPricing)
+        PricingData data = pricingRepository.findPricingByTcn(PRODUCT_ID)
+        data.currentPrice = initialPrice
+        data.currencyCode = initialCode
+        pricingRepository.save(data)
     }
 
     def "updatePrice - request and path mismatch"() {
